@@ -5,38 +5,47 @@ import random
 print(logo)
 
 
-
+EASY_LEVEL_TURNS = 10
+HARD_LEVEL_TURNS = 5
 correct_number = random.randint(1,100)
 print("Welcome to the number guess game!")
 print("I'm thinking of a number between 1 and 100.")
-#print(f"pssss the correct number is {correct_number}")
+print(f"pssss the correct number is {correct_number}")
 
-level = input("Choose a difficulty. Type 'easy' or 'hard':\n").lower()
-number_of_attempts = 0
-if level == "easy":
-    number_of_attempts = 10
-else:
-    number_of_attempts = 5
 
-print(f"You have {number_of_attempts} attempts remaining to guess the number.")
-guess = int(input("Make a guess: "))
+def difficulty():
+    level = input("Choose a difficulty. Type 'easy' or 'hard':\n").lower()
+    if level == "easy":
+        return EASY_LEVEL_TURNS
+    else:
+        return HARD_LEVEL_TURNS
 
-while correct_number != guess and number_of_attempts != 0:
+
+
+
+def play_game():
     
-    if guess > correct_number:
-        print("Too High.")
-        print("Guess again")
-        print(f"You have {number_of_attempts} attempts remaining to guess the number.")
+    def check_answer(guess, correct_number, turns):
+        if guess > correct_number:
+            print("Too High.")
+            return turns - 1
+        elif guess < correct_number:
+            print("Too Low.")
+            return turns - 1
+        else:
+            print("You win....")
+            return
+
+    guess = 0
+    number_of_turns = difficulty()
+    while guess != correct_number:
+        print(f"You have {number_of_turns} attempts remaining to guess the number.")
+        print(number_of_turns)
         guess = int(input("Make a guess: "))
-        number_of_attempts -= 1
-    elif guess < correct_number:
-        print("Too Low.")
-        print("Guess again")
-        print(f"You have {number_of_attempts} attempts remaining to guess the number.")
-        guess = int(input("Make a guess: "))
-        number_of_attempts -= 1
-    
-if guess == correct_number:
-    print(f"You win with {number_of_attempts} attempts left")
-else:
-    print("You ran out of lives.")
+        number_of_turns = check_answer(guess, correct_number, number_of_turns)
+        
+        if number_of_turns == 0:
+            print("You've run out of turns, you lose.")
+            return
+        
+play_game()
